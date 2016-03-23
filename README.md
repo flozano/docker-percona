@@ -86,7 +86,6 @@ root@docker:~# docker run --restart=unless-stopped \
 --name percona \
 -v /mnt/volumes/percona:/var/lib/mysql \
 -e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
--e MYSQL_ROOT_PASSWORD="root-password" \
 -p 3306:3306 \
 -d aggr/percona
 ````
@@ -98,7 +97,6 @@ root@docker:~# docker run --restart=unless-stopped \
 -v /mnt/config/percona:/etc/mysql \
 -v /mnt/volumes/percona:/var/lib/mysql \
 -e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
--e MYSQL_ROOT_PASSWORD="root-password" \
 -p 3306:3306 \
 -d aggr/percona
 ````
