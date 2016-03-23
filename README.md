@@ -88,3 +88,22 @@ docker run --restart=unless-stopped \
 -e REPLICATION_PASS=replica \
 -p 3306:3306 \
 -d aggr/percona
+````
+
+### Please use logger for check any configuration errors:
+
+````
+root@docker:~# docker logs -f percona
+
+Creating /etc/mysql/conf.d/mysqld.cnf from environment parameters ...
+ - checking and writing user = mysql
+ - checking and writing datadir = /var/lib/mysql/db
+ - checking and writing bind-address = 0.0.0.0
+ - checking and writing server-id = 1
+ .....
+ .....
+ - checking and writing max_heap_table_size = 32M
+ - checking and writing thread_handling = pool-of-threads
+ - checking and writing thread_pool_size = 1
+
+ Ready for start up in production mode.
