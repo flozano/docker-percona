@@ -90,7 +90,7 @@ root@docker:~# docker run --restart=unless-stopped \
 -d aggr/percona
 ````
 
-### 6. If you want more simply starting, add persistent storage for configuration files too:
+### 6. If you want an easier start than before, add persistent storage for config too:
 ````
 root@docker:~# docker run --restart=unless-stopped \
 --name percona \
