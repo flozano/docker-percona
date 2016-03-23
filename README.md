@@ -1,2 +1,2 @@
 # docker-percona
-Percona MySQL Database (master &amp; slave)
+Percona MySQL Database (fully configurable)
