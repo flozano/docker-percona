@@ -4,11 +4,109 @@ Percona MySQL Database
 
 [![Travis CI](https://img.shields.io/travis/rusxakep/docker-percona/master.svg)](https://travis-ci.org/rusxakep/docker-percona/branches)
 
-# Usage (example):
+# Usage:
 
+### 1. MySQL master node (minimal):
 ````
-docker run --restart=unless-stopped \
+root@docker:~# docker run --restart=unless-stopped \
+--name percona-master \
+-e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
+-e MYSQL_MYSQLD_SERVER_ID=1 \
+-e MYSQL_MYSQLD_GTID_MODE=ON \
+-e MYSQL_MYSQLD_ENFORCE_GTID_CONSISTENCY=true \
+-e MYSQL_MYSQLD_LOG_BIN=/var/lib/mysql/binary-log \
+-e MYSQL_MYSQLD_BINLOG_IGNORE_DB="mysql" \
+-e MYSQL_MYSQLD_BINLOG_FORMAT=ROW \
+-e MYSQL_MYSQLD_LOG_SLAVE_UPDATES=true \
+-e MYSQL_ROOT_PASSWORD="root-password" \
+-e REPLICATION_MASTER=true \
+-e REPLICATION_USER=replica \
+-e REPLICATION_PASS=replica \
+-p 3306:3306 \
+-d aggr/percona
+````
+
+### 2. MySQL slave node 01 (minimal):
+````
+root@docker:~# docker run --restart=unless-stopped \
+--name percona-slave01 \
+-e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
+-e MYSQL_MYSQLD_SERVER_ID=2 \
+-e MYSQL_MYSQLD_LOG_BIN=/var/lib/mysql/replication/binary-log \
+-e MYSQL_MYSQLD_GTID_MODE=ON \
+-e MYSQL_MYSQLD_ENFORCE_GTID_CONSISTENCY=true \
+-e MYSQL_MYSQLD_LOG_SLAVE_UPDATES=true \
+-e MYSQL_ROOT_PASSWORD="other-root-password" \
+-e REPLICATION_SLAVE=true \
+-e MYSQL_MASTER_ADDR=mysql-master \
+-e MYSQL_MASTER_PORT=3306 \
+-e REPLICATION_USER=replica \
+-e REPLICATION_PASS=replica \
+-p 3307:3306 \
+-l mysql-master:percona-master
+-d aggr/percona
+````
+
+### 3. MySQL slave node 02 (minimal):
+````
+root@docker:~# docker run --restart=unless-stopped \
+--name percona-slave02 \
+-e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
+-e MYSQL_MYSQLD_SERVER_ID=3 \
+-e MYSQL_MYSQLD_LOG_BIN=/var/lib/mysql/replication/binary-log \
+-e MYSQL_MYSQLD_GTID_MODE=ON \
+-e MYSQL_MYSQLD_ENFORCE_GTID_CONSISTENCY=true \
+-e MYSQL_MYSQLD_LOG_SLAVE_UPDATES=true \
+-e MYSQL_ROOT_PASSWORD="next-other-root-password" \
+-e REPLICATION_SLAVE=true \
+-e MYSQL_MASTER_ADDR=mysql-master \
+-e MYSQL_MASTER_PORT=3306 \
+-e REPLICATION_USER=replica \
+-e REPLICATION_PASS=replica \
+-p 3308:3306 \
+-l mysql-master:percona-master
+-d aggr/percona
+````
+
+.... more and more slave node's ....
+
+### 4. MySQL master (single) node (no slave):
+````
+root@docker:~# docker run --restart=unless-stopped \
 --name percona \
+-e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
+-e MYSQL_ROOT_PASSWORD="root-password" \
+-p 3306:3306 \
+-d aggr/percona
+````
+
+### 5. If you want add persistent storage for database files:
+````
+root@docker:~# docker run --restart=unless-stopped \
+--name percona \
+-v /mnt/volumes/percona:/var/lib/mysql \
+-e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
+-e MYSQL_ROOT_PASSWORD="root-password" \
+-p 3306:3306 \
+-d aggr/percona
+````
+
+### 6. If you want more simply starting, add persistent storage for configuration files too:
+````
+root@docker:~# docker run --restart=unless-stopped \
+--name percona \
+-v /mnt/config/percona:/etc/mysql \
+-v /mnt/volumes/percona:/var/lib/mysql \
+-e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
+-e MYSQL_ROOT_PASSWORD="root-password" \
+-p 3306:3306 \
+-d aggr/percona
+````
+
+### 7. MySQL master node (complex example):
+````
+root@docker:~# docker run --restart=unless-stopped \
+--name percona-master \
 -e MYSQL_MYSQLD_BIND_ADDRESS=0.0.0.0 \
 -e MYSQL_MYSQLD_SERVER_ID=1 \
 -e MYSQL_MYSQLD_DATADIR=/var/lib/mysql/db \
@@ -90,8 +188,14 @@ docker run --restart=unless-stopped \
 -d aggr/percona
 ````
 
-### Please use logger for check any configuration errors:
+### Additional some useful options:
+````
+MYSQL_ONETIME_PASSWORD - expire root password after start container
+MYSQL_RANDOM_ROOT_PASSWORD - generating absolutly random password for root (see logs)
+MYSQL_INITDB_SKIP_TZINFO - if you using STRICT_ALL_TABLES (https://bugs.mysql.com/bug.php?id=20545)
+````
 
+### Please use logger for check any configuration errors:
 ````
 root@docker:~# docker logs -f percona
 
@@ -107,3 +211,4 @@ Creating /etc/mysql/conf.d/mysqld.cnf from environment parameters ...
  - checking and writing thread_pool_size = 1
 
  Ready for start up in production mode.
+ ````
