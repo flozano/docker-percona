@@ -1,0 +1,13 @@
+language: bash
+services: docker
+
+env:
+  - VERSION=5.7
+
+before_script:
+  - env | sort
+  - cd "$VERSION"
+  - image="aggr/percona:$VERSION"
+
+script:
+  - docker build -t "$image" .
