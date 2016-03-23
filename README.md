@@ -1,10 +1,10 @@
 # docker-percona
-Percona MySQL Database (fully configurable)
+Percona MySQL Database
 
 
 [![Travis CI](https://img.shields.io/travis/rusxakep/docker-percona/master.svg)](https://travis-ci.org/rusxakep/docker-percona/branches)
 
-# Usage:
+# Usage (example):
 
 ````
 docker run --restart=unless-stopped \
