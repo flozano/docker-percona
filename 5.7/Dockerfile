@@ -1,6 +1,8 @@
 # vim:set ft=dockerfile:
 FROM aggr/ubuntu
 
+MAINTAINER: Mikhail Baykov <mike@baikov.com>
+
 ENV PERCONA_MAJOR 5.7
 ENV PERCONA_VERSION 5.7.11-4-1.trusty
 
