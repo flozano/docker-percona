@@ -17,7 +17,6 @@ for arg; do
     esac
 done
 
-# write_conf_value2 $MYSQL_MYSQLD_USER "user" ["mysqld.cnf"]
 write_conf() {
     if [ ! -z "$1" ]; then
         cnf="/etc/mysql/conf.d/mysqld.cnf"
@@ -30,7 +29,6 @@ write_conf() {
     fi
 }
 
-# write_conf_value2 MYSQL_MYSQLD_USER "$MYSQL_MYSQLD_USER" "user" "mysql" ["mysqld.cnf"]
 write_conf_value() {
     if [ ! -z $2 ]; then
         cnf="/etc/mysql/conf.d/mysqld.cnf"
