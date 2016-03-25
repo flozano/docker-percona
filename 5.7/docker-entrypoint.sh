@@ -38,7 +38,7 @@ write_conf_value() {
             cnf="/etc/mysql/conf.d/$3"
         fi
         echo -n " - checking and writing $1 = $2"
-        echo $1" = "${2} >> ${cnf}
+        echo $1" = "$2 >> ${cnf}
         echo $(mysqld --verbose --help 1>/dev/null)
     fi
 }
