@@ -63,41 +63,63 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
 	        write_conf_value  "sql-mode" ${MYSQL_MYSQLD_SQL_MODE}
         MYSQL_MYSQLD_BASEDIR=${MYSQL_MYSQLD_BASEDIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "basedir" { print $2; exit }')} && \
             write_conf_value "basedir" ${MYSQL_MYSQLD_BASEDIR}
-        MYSQL_MYSQLD_INNODB_DATA_HOME_DIR=${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_data_home_dir" { print $2; exit }')} && \
+        MYSQL_MYSQLD_INNODB_DATA_HOME_DIR=${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_data_home_dir" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_INNODB_DATA_HOME_DIR" ]; then
             mkdir -p -m 0750 ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR} && \
             write_conf_value "innodb_data_home_dir" ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR}
-        MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR=${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_group_home_dir" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR=${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_group_home_dir" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR" ]; then
             mkdir -p -m 0750 ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR} && \
             write_conf_value "innodb_log_group_home_dir" ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR}
-        MYSQL_MYSQLD_LOG_BIN=${MYSQL_MYSQLD_LOG_BIN:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-bin" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_LOG_BIN=${MYSQL_MYSQLD_LOG_BIN:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-bin" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_LOG_BIN" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_LOG_BIN}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_LOG_BIN}) && \
             write_conf_value "log-bin" ${MYSQL_MYSQLD_LOG_BIN}
-        MYSQL_MYSQLD_LOG_ERROR=${MYSQL_MYSQLD_LOG_ERROR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-error" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_LOG_ERROR=${MYSQL_MYSQLD_LOG_ERROR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-error" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_LOG_ERROR" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_LOG_ERROR}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_LOG_ERROR}) && \
             write_conf_value "log-error" ${MYSQL_MYSQLD_LOG_ERROR}
-        MYSQL_MYSQLD_MASTER_INFO_FILE=${MYSQL_MYSQLD_MASTER_INFO_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "master_info_file" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_MASTER_INFO_FILE=${MYSQL_MYSQLD_MASTER_INFO_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "master_info_file" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_MASTER_INFO_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_MASTER_INFO_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_MASTER_INFO_FILE}) && \
             write_conf_value "master_info_file" ${MYSQL_MYSQLD_MASTER_INFO_FILE}
-        MYSQL_MYSQLD_PID_FILE=${MYSQL_MYSQLD_PID_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "pid-file" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_PID_FILE=${MYSQL_MYSQLD_PID_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "pid-file" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_PID_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_PID_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_PID_FILE}) && \
             write_conf_value "pid-file" ${MYSQL_MYSQLD_PID_FILE}
-        MYSQL_MYSQLD_RELAY_LOG=${MYSQL_MYSQLD_RELAY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_RELAY_LOG=${MYSQL_MYSQLD_RELAY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_RELAY_LOG" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_RELAY_LOG}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_RELAY_LOG}) && \
             write_conf_value "relay_log" ${MYSQL_MYSQLD_RELAY_LOG}
-        MYSQL_MYSQLD_RELAY_LOG_INFO_FILE=${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log_info_file" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_RELAY_LOG_INFO_FILE=${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log_info_file" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_RELAY_LOG_INFO_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}) && \
             write_conf_value "relay_log_info_file" ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}
-        MYSQL_MYSQLD_RELAY_LOG_INDEX=${MYSQL_MYSQLD_RELAY_LOG_INDEX:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log_index" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_RELAY_LOG_INDEX=${MYSQL_MYSQLD_RELAY_LOG_INDEX:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log_index" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_RELAY_LOG_INFO_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INDEX}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INDEX}) && \
             write_conf_value "relay_log_index" ${MYSQL_MYSQLD_RELAY_LOG_INDEX}
+        fi
         MYSQL_MYSQLD_SLOW_QUERY_LOG=${MYSQL_MYSQLD_SLOW_QUERY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow_query_log" { print $2; exit }')} && \
             write_conf_value "slow_query_log" ${MYSQL_MYSQLD_SLOW_QUERY_LOG}
-        MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE=${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow_query_log_file" { print $2; exit }')} && \
+        MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE=${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow_query_log_file" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}) && \
             write_conf_value "slow_query_log_file" ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}
-        MYSQL_MYSQLD_SOCKET=${MYSQL_MYSQLD_SOCKET:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "socket" { print $2; exit }')} && \
+        fi
+        MYSQL_MYSQLD_SOCKET=${MYSQL_MYSQLD_SOCKET:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "socket" { print $2; exit }')}
+        if [ ! -z "$MYSQL_MYSQLD_SOCKET" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_SOCKET}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_SOCKET}) && \
             write_conf_value "socket" ${MYSQL_MYSQLD_SOCKET}
+        fi
         MYSQL_MYSQLD_TMPDIR=${MYSQL_MYSQLD_TMPDIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "tmpdir" { print $2; exit }')} && \
             write_conf_value "tmpdir" ${MYSQL_MYSQLD_TMPDIR}
         MYSQL_MYSQLD_LOG_SLAVE_UPDATES=${MYSQL_MYSQLD_LOG_SLAVE_UPDATES:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-slave-updates" { print $2; exit }')} && \
