@@ -2,7 +2,7 @@
 FROM aggr/ubuntu
 
 ENV PERCONA_MAJOR 5.7
-ENV PERCONA_VERSION 5.7.11-4-1.trusty
+ENV PERCONA_VERSION 5.7.12-5-1.trusty
 
 # Avoid ERROR: invoke-rc.d: policy-rc.d denied execution of start.
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
