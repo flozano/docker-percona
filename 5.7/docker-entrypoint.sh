@@ -19,9 +19,9 @@ done
 
 write_conf() {
     if [ ! -z "$1" ]; then
-        cnf="/etc/mysql/conf.d/mysqld.cnf"
+        cnf="/etc/mysql/percona-server.conf.d/mysqld.cnf"
         if [ ! -z "$3" ]; then
-            cnf="/etc/mysql/conf.d/$3"
+            cnf="/etc/mysql/percona-server.conf.d/$3"
         fi
         echo -n " - checking and writing $2"
         echo $2 >> ${cnf}
@@ -31,12 +31,9 @@ write_conf() {
 
 write_conf_value() {
     if [ ! -z $2 ]; then
-        cnf="/etc/mysql/conf.d/mysqld.cnf"
-        if [ ! -z "$3" ]; then
-            cnf="/etc/mysql/conf.d/$3"
-        fi
-        echo -n " - checking and writing $1 = $2"
-        echo $1" = "$2 >> ${cnf}
+        cnf="/etc/mysql/percona-server.conf.d/mysqld.cnf"
+        echo -n " - checking and writing $1 = ${@:2}"
+        echo $1" = "${@:2} >> ${cnf}
         echo $(mysqld --verbose --help 1>/dev/null)
     fi
 }
@@ -45,11 +42,11 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
     # Get config
     DATADIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
-    if [ ! -f /etc/mysql/conf.d/mysqld.cnf ]; then
-	    echo "Creating /etc/mysql/conf.d/mysqld.cnf from environment parameters ..."
-	    echo "[mysqld]" > /etc/mysql/conf.d/mysqld.cnf
+    if [ ! -f /etc/mysql/percona-server.conf.d/mysqld.cnf ]; then
+	echo "Creating /etc/mysql/percona-server.conf.d/mysqld.cnf from environment parameters ..."
+	echo "[mysqld]" > /etc/mysql/percona-server.conf.d/mysqld.cnf
 
-	    MYSQL_MYSQLD_USER=${MYSQL_MYSQLD_USER:-mysql} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} /etc/mysql && write_conf_value "user" ${MYSQL_MYSQLD_USER}
+	MYSQL_MYSQLD_USER=${MYSQL_MYSQLD_USER:-mysql} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} /etc/mysql && write_conf_value "user" ${MYSQL_MYSQLD_USER}
         MYSQL_MYSQLD_DATADIR=${MYSQL_MYSQLD_DATADIR:-$DATADIR} && mkdir -p -m 0750 ${MYSQL_MYSQLD_DATADIR} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} ${MYSQL_MYSQLD_DATADIR} && write_conf_value "datadir" ${MYSQL_MYSQLD_DATADIR}
         MYSQL_MYSQLD_BIND_ADDRESS=${MYSQL_MYSQLD_BIND_ADDRESS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "bind-address" { print $2; exit }')} && write_conf_value "bind-address" ${MYSQL_MYSQLD_BIND_ADDRESS}
 
@@ -59,19 +56,19 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             MYSQL_MYSQLD_SERVER_ID=${MYSQL_MYSQLD_SERVER_ID:-1}
         fi
         write_conf_value "server-id" ${MYSQL_MYSQLD_SERVER_ID}
-	    MYSQL_MYSQLD_SQL_MODE=${MYSQL_MYSQLD_SQL_MODE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "sql-mode" { print $2; exit }')} && \
-	        write_conf_value  "sql-mode" ${MYSQL_MYSQLD_SQL_MODE}
+        MYSQL_MYSQLD_SQL_MODE=${MYSQL_MYSQLD_SQL_MODE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "sql-mode" { print $2; exit }')} && \
+	    write_conf_value  "sql-mode" ${MYSQL_MYSQLD_SQL_MODE}
         MYSQL_MYSQLD_BASEDIR=${MYSQL_MYSQLD_BASEDIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "basedir" { print $2; exit }')} && \
-            write_conf_value "basedir" ${MYSQL_MYSQLD_BASEDIR}
-        MYSQL_MYSQLD_INNODB_DATA_HOME_DIR=${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_data_home_dir" { print $2; exit }')}
+	    write_conf_value "basedir" ${MYSQL_MYSQLD_BASEDIR}
+        MYSQL_MYSQLD_INNODB_DATA_HOME_DIR=${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-data-home-dir" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_INNODB_DATA_HOME_DIR" ]; then
             mkdir -p -m 0750 ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR} && \
-            write_conf_value "innodb_data_home_dir" ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR}
+            write_conf_value "innodb-data-home-dir" ${MYSQL_MYSQLD_INNODB_DATA_HOME_DIR}
         fi
-        MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR=${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_group_home_dir" { print $2; exit }')}
+        MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR=${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-log-group-home-dir" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR" ]; then
             mkdir -p -m 0750 ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR} && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR} && \
-            write_conf_value "innodb_log_group_home_dir" ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR}
+            write_conf_value "innodb-log-group-home-dir" ${MYSQL_MYSQLD_INNODB_LOG_GROUP_HOME_DIR}
         fi
         MYSQL_MYSQLD_LOG_BIN=${MYSQL_MYSQLD_LOG_BIN:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-bin" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_LOG_BIN" ]; then
@@ -137,7 +134,7 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
         MYSQL_MYSQLD_REPLICATE_DO_DB=${MYSQL_MYSQLD_REPLICATE_DO_DB:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "replicate-do-db" { print $2; exit }')} && \
             write_conf_value "replicate-do-db" ${MYSQL_MYSQLD_REPLICATE_DO_DB}
         MYSQL_MYSQLD_BINLOG_IGNORE_DB=${MYSQL_MYSQLD_BINLOG_IGNORE_DB:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "binlog-ignore-db" { print $2; exit }')} && \
-            write_conf_value "binlog-ignore-db" ${MYSQL_MYSQLD_BINLOG_IGNORE_DB}
+            write_conf_value "binlog-ignore-db" \"${MYSQL_MYSQLD_BINLOG_IGNORE_DB}\"
         MYSQL_MYSQLD_BINLOG_ROW_EVENT_MAX_SIZE=${MYSQL_MYSQLD_BINLOG_ROW_EVENT_MAX_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "binlog-row-event-max-size" { print $2; exit }')} && \
             write_conf_value "binlog-row-event-max-size" ${MYSQL_MYSQLD_BINLOG_ROW_EVENT_MAX_SIZE}
         MYSQL_MYSQLD_BINLOG_FORMAT=${MYSQL_MYSQLD_BINLOG_FORMAT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "binlog-format" { print $2; exit }')} && \
@@ -170,7 +167,7 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             write_conf_value "character_set_server" ${MYSQL_MYSQLD_CHARACTER_SET_SERVER}
         MYSQL_MYSQLD_COLLATION_SERVER=${MYSQL_MYSQLD_COLLATION_SERVER:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "collation-server" { print $2; exit }')} && \
             write_conf_value "collation-server" ${MYSQL_MYSQLD_COLLATION_SERVER}
-        MYSQL_MYSQLD_INIT_CONNECT=${MYSQL_MYSQLD_INIT_CONNECT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "init_connect" { print $2; exit }')} && \
+        MYSQL_MYSQLD_INIT_CONNECT=\"${MYSQL_MYSQLD_INIT_CONNECT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "init_connect" { print $2; exit }')}\" && \
             write_conf_value "init_connect" ${MYSQL_MYSQLD_INIT_CONNECT}
         MYSQL_MYSQLD_CONNECT_TIMEOUT=${MYSQL_MYSQLD_CONNECT_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "connect_timeout" { print $2; exit }')} && \
             write_conf_value "connect_timeout" ${MYSQL_MYSQLD_CONNECT_TIMEOUT}
@@ -192,36 +189,36 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             write_conf_value "transaction-isolation" ${MYSQL_MYSQLD_TRANSACTION_ISOLATION}
         MYSQL_MYSQLD_LC_MESSAGES_DIR=${MYSQL_MYSQLD_LC_MESSAGES_DIR:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "lc-messages-dir" { print $2; exit }')} && \
             write_conf_value "lc-messages-dir" ${MYSQL_MYSQLD_LC_MESSAGES_DIR}
-        MYSQL_MYSQLD_INNODB_FILE_PER_TABLE=${MYSQL_MYSQLD_INNODB_FILE_PER_TABLE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_file_per_table" { print $2; exit }')} && \
-            write_conf_value "innodb_file_per_table" ${MYSQL_MYSQLD_INNODB_FILE_PER_TABLE}
-        MYSQL_MYSQLD_INNODB_OPEN_FILES=${MYSQL_MYSQLD_INNODB_OPEN_FILES:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_open_files" { print $2; exit }')} && \
-            write_conf_value "innodb_open_files" ${MYSQL_MYSQLD_INNODB_OPEN_FILES}
-        MYSQL_MYSQLD_INNODB_BUFFER_POOL_SIZE=${MYSQL_MYSQLD_INNODB_BUFFER_POOL_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_buffer_pool_size" { print $2; exit }')} && \
-            write_conf_value "innodb_buffer_pool_size" ${MYSQL_MYSQLD_INNODB_BUFFER_POOL_SIZE}
-        MYSQL_MYSQLD_INNODB_FLUSH_LOG_AT_TRX_COMMIT=${MYSQL_MYSQLD_INNODB_FLUSH_LOG_AT_TRX_COMMIT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_flush_log_at_trx_commit" { print $2; exit }')} && \
-            write_conf_value "innodb_flush_log_at_trx_commit" ${MYSQL_MYSQLD_INNODB_FLUSH_LOG_AT_TRX_COMMIT}
-        MYSQL_MYSQLD_INNODB_FLUSH_METHOD=${MYSQL_MYSQLD_INNODB_FLUSH_METHOD:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_flush_method" { print $2; exit }')} && \
-            write_conf_value "innodb_flush_method" ${MYSQL_MYSQLD_INNODB_FLUSH_METHOD}
-        MYSQL_MYSQLD_INNODB_LOG_BUFFER_SIZE=${MYSQL_MYSQLD_INNODB_LOG_BUFFER_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_buffer_size" { print $2; exit }')} && \
-            write_conf_value "innodb_log_buffer_size" ${MYSQL_MYSQLD_INNODB_LOG_BUFFER_SIZE}
-        MYSQL_MYSQLD_INNODB_AUTOEXTEND_INCREMENT=${MYSQL_MYSQLD_INNODB_AUTOEXTEND_INCREMENT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_autoextend_increment" { print $2; exit }')} && \
-            write_conf_value "innodb_autoextend_increment" ${MYSQL_MYSQLD_INNODB_AUTOEXTEND_INCREMENT}
-        MYSQL_MYSQLD_INNODB_CONCURRENCY_TICKETS=${MYSQL_MYSQLD_INNODB_CONCURRENCY_TICKETS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_concurrency_tickets" { print $2; exit }')} && \
-            write_conf_value "innodb_concurrency_tickets" ${MYSQL_MYSQLD_INNODB_CONCURRENCY_TICKETS}
-        MYSQL_MYSQLD_INNODB_DATA_FILE_PATH=${MYSQL_MYSQLD_INNODB_DATA_FILE_PATH:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_data_file_path" { print $2; exit }')} && \
-            write_conf_value "innodb_data_file_path" ${MYSQL_MYSQLD_INNODB_DATA_FILE_PATH}
-        MYSQL_MYSQLD_INNODB_LOG_FILES_IN_GROUP=${MYSQL_MYSQLD_INNODB_LOG_FILES_IN_GROUP:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_files_in_group" { print $2; exit }')} && \
-            write_conf_value "innodb_log_files_in_group" ${MYSQL_MYSQLD_INNODB_LOG_FILES_IN_GROUP}
-        MYSQL_MYSQLD_INNODB_OLD_BLOCKS_TIME=${MYSQL_MYSQLD_INNODB_OLD_BLOCKS_TIME:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_old_blocks_time" { print $2; exit }')} && \
-            write_conf_value "innodb_old_blocks_time" ${MYSQL_MYSQLD_INNODB_OLD_BLOCKS_TIME}
-        MYSQL_MYSQLD_INNODB_STATS_ON_METADATA=${MYSQL_MYSQLD_INNODB_STATS_ON_METADATA:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_stats_on_metadata" { print $2; exit }')} && \
-            write_conf_value "innodb_stats_on_metadata" ${MYSQL_MYSQLD_INNODB_STATS_ON_METADATA}
-        MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN=${MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_fast_shutdown" { print $2; exit }')} && \
-            write_conf_value "innodb_fast_shutdown" ${MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN}
-        MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS=${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_checksums" { print $2; exit }')} && \
-            write_conf_value "innodb_log_checksums" ${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS}
-        MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE=${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_file_size" { print $2; exit }')} && \
-            write_conf_value "innodb_log_file_size" ${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE}
+        MYSQL_MYSQLD_INNODB_FILE_PER_TABLE=${MYSQL_MYSQLD_INNODB_FILE_PER_TABLE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-file-per-table" { print $2; exit }')} && \
+            write_conf_value "innodb-file-per-table" ${MYSQL_MYSQLD_INNODB_FILE_PER_TABLE}
+        MYSQL_MYSQLD_INNODB_OPEN_FILES=${MYSQL_MYSQLD_INNODB_OPEN_FILES:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-open-files" { print $2; exit }')} && \
+            write_conf_value "innodb-open-files" ${MYSQL_MYSQLD_INNODB_OPEN_FILES}
+        MYSQL_MYSQLD_INNODB_BUFFER_POOL_SIZE=${MYSQL_MYSQLD_INNODB_BUFFER_POOL_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-buffer-pool-size" { print $2; exit }')} && \
+            write_conf_value "innodb-buffer-pool-size" ${MYSQL_MYSQLD_INNODB_BUFFER_POOL_SIZE}
+        MYSQL_MYSQLD_INNODB_FLUSH_LOG_AT_TRX_COMMIT=${MYSQL_MYSQLD_INNODB_FLUSH_LOG_AT_TRX_COMMIT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-flush-log-at-trx-commit" { print $2; exit }')} && \
+            write_conf_value "innodb-flush-log-at-trx-commit" ${MYSQL_MYSQLD_INNODB_FLUSH_LOG_AT_TRX_COMMIT}
+        MYSQL_MYSQLD_INNODB_FLUSH_METHOD=${MYSQL_MYSQLD_INNODB_FLUSH_METHOD:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-flush-method" { print $2; exit }')} && \
+            write_conf_value "innodb-flush-method" ${MYSQL_MYSQLD_INNODB_FLUSH_METHOD}
+        MYSQL_MYSQLD_INNODB_LOG_BUFFER_SIZE=${MYSQL_MYSQLD_INNODB_LOG_BUFFER_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-log-buffer-size" { print $2; exit }')} && \
+            write_conf_value "innodb-log-buffer-size" ${MYSQL_MYSQLD_INNODB_LOG_BUFFER_SIZE}
+        MYSQL_MYSQLD_INNODB_AUTOEXTEND_INCREMENT=${MYSQL_MYSQLD_INNODB_AUTOEXTEND_INCREMENT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-autoextend-increment" { print $2; exit }')} && \
+            write_conf_value "innodb-autoextend-increment" ${MYSQL_MYSQLD_INNODB_AUTOEXTEND_INCREMENT}
+        MYSQL_MYSQLD_INNODB_CONCURRENCY_TICKETS=${MYSQL_MYSQLD_INNODB_CONCURRENCY_TICKETS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-concurrency-tickets" { print $2; exit }')} && \
+            write_conf_value "innodb-concurrency-tickets" ${MYSQL_MYSQLD_INNODB_CONCURRENCY_TICKETS}
+        MYSQL_MYSQLD_INNODB_DATA_FILE_PATH=${MYSQL_MYSQLD_INNODB_DATA_FILE_PATH:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-data-file-path" { print $2; exit }')} && \
+            write_conf_value "innodb-data-file-path" ${MYSQL_MYSQLD_INNODB_DATA_FILE_PATH}
+        MYSQL_MYSQLD_INNODB_LOG_FILES_IN_GROUP=${MYSQL_MYSQLD_INNODB_LOG_FILES_IN_GROUP:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-log-files-in-group" { print $2; exit }')} && \
+            write_conf_value "innodb-log-files-in-group" ${MYSQL_MYSQLD_INNODB_LOG_FILES_IN_GROUP}
+        MYSQL_MYSQLD_INNODB_OLD_BLOCKS_TIME=${MYSQL_MYSQLD_INNODB_OLD_BLOCKS_TIME:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-old-blocks-time" { print $2; exit }')} && \
+            write_conf_value "innodb-old-blocks-time" ${MYSQL_MYSQLD_INNODB_OLD_BLOCKS_TIME}
+        MYSQL_MYSQLD_INNODB_STATS_ON_METADATA=${MYSQL_MYSQLD_INNODB_STATS_ON_METADATA:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-stats-on-metadata" { print $2; exit }')} && \
+            write_conf_value "innodb-stats-on-metadata" ${MYSQL_MYSQLD_INNODB_STATS_ON_METADATA}
+        MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN=${MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-fast-shutdown" { print $2; exit }')} && \
+            write_conf_value "innodb-fast-shutdown" ${MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN}
+        MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS=${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-log-checksums" { print $2; exit }')} && \
+            write_conf_value "innodb-log-checksums" ${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS}
+        MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE=${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-log-file-size" { print $2; exit }')} && \
+            write_conf_value "innodb-log-file-size" ${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE}
         MYSQL_MYSQLD_PERFORMANCE_SCHEMA=${MYSQL_MYSQLD_PERFORMANCE_SCHEMA:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "performance_schema" { print $2; exit }')} && \
             write_conf_value "performance_schema" ${MYSQL_MYSQLD_PERFORMANCE_SCHEMA}
         MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP=${MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "explicit_defaults_for_timestamp" { print $2; exit }')} && \
