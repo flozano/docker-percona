@@ -4,7 +4,7 @@ FROM aggr/ubuntu
 MAINTAINER Mikhail Baykov <mike@baikov.com>
 
 ENV PERCONA_MAJOR 5.7
-ENV PERCONA_VERSION 5.7.12-5-1.trusty
+ENV PERCONA_VERSION 5.7.17-13-1.trusty
 
 # Avoid ERROR: invoke-rc.d: policy-rc.d denied execution of start.
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
@@ -13,6 +13,8 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
+
+RUN cd /tmp && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb && dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb
 
 # install "pwgen" for randomizing passwords
 RUN apt-get -qq update && apt-get install -qqy pwgen && rm -rf /var/lib/apt/lists/*
