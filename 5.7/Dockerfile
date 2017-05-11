@@ -19,8 +19,8 @@ RUN cd /tmp && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_rel
 # install "pwgen" for randomizing passwords
 RUN apt-get -qq update && apt-get install -qqy pwgen && rm -rf /var/lib/apt/lists/*
 
-RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A
-RUN echo 'deb http://repo.percona.com/apt trusty main' > /etc/apt/sources.list.d/percona.list
+#RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A
+#RUN echo 'deb http://repo.percona.com/apt trusty main' > /etc/apt/sources.list.d/percona.list
 
 # the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
 # also, we set debconf keys to make APT a little quieter
