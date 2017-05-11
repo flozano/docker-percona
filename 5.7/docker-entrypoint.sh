@@ -218,6 +218,8 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             write_conf_value "innodb_stats_on_metadata" ${MYSQL_MYSQLD_INNODB_STATS_ON_METADATA}
         MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN=${MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_fast_shutdown" { print $2; exit }')} && \
             write_conf_value "innodb_fast_shutdown" ${MYSQL_MYSQLD_INNODB_FAST_SHUTDOWN}
+        MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS=${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_checksums" { print $2; exit }')} && \
+            write_conf_value "innodb_log_checksums" ${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS}
         MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE=${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb_log_file_size" { print $2; exit }')} && \
             write_conf_value "innodb_log_file_size" ${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE}
         MYSQL_MYSQLD_PERFORMANCE_SCHEMA=${MYSQL_MYSQLD_PERFORMANCE_SCHEMA:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "performance_schema" { print $2; exit }')} && \
