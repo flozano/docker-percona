@@ -14,7 +14,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN cd /tmp && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb && dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb
+RUN cd /tmp && wget https://repo.percona.com/apt/percona-release_0.1-4.$(lsb_release -sc)_all.deb && dpkg -i percona-release_0.1-4.$(lsb_release -sc)_all.deb && rm -f /tmp/percona-release*
 
 # install "pwgen" for randomizing passwords
 RUN apt-get -qq update && apt-get install -qqy pwgen && rm -rf /var/lib/apt/lists/*
@@ -30,6 +30,7 @@ RUN { \
     } | debconf-set-selections \
     && apt-get -qq update && DEBIAN_FRONTEND=noninteractive \
     && apt-get install -qqy percona-server-server-$PERCONA_MAJOR=$PERCONA_VERSION \
+    && rm -rf /etc/mysql/percona-server* \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/lib/mysql/*
 
