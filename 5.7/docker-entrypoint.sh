@@ -90,27 +90,27 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_PID_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_PID_FILE}) && \
             write_conf_value "pid-file" ${MYSQL_MYSQLD_PID_FILE}
         fi
-        MYSQL_MYSQLD_RELAY_LOG=${MYSQL_MYSQLD_RELAY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log" { print $2; exit }')}
+        MYSQL_MYSQLD_RELAY_LOG=${MYSQL_MYSQLD_RELAY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay-log" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_RELAY_LOG" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_RELAY_LOG}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_RELAY_LOG}) && \
-            write_conf_value "relay_log" ${MYSQL_MYSQLD_RELAY_LOG}
+            write_conf_value "relay-log" ${MYSQL_MYSQLD_RELAY_LOG}
         fi
-        MYSQL_MYSQLD_RELAY_LOG_INFO_FILE=${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log_info_file" { print $2; exit }')}
+        MYSQL_MYSQLD_RELAY_LOG_INFO_FILE=${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay-log-info-file" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_RELAY_LOG_INFO_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}) && \
-            write_conf_value "relay_log_info_file" ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}
+            write_conf_value "relay-log-info-file" ${MYSQL_MYSQLD_RELAY_LOG_INFO_FILE}
         fi
-        MYSQL_MYSQLD_RELAY_LOG_INDEX=${MYSQL_MYSQLD_RELAY_LOG_INDEX:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay_log_index" { print $2; exit }')}
+        MYSQL_MYSQLD_RELAY_LOG_INDEX=${MYSQL_MYSQLD_RELAY_LOG_INDEX:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "relay-log-index" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_RELAY_LOG_INFO_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INDEX}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_RELAY_LOG_INDEX}) && \
-            write_conf_value "relay_log_index" ${MYSQL_MYSQLD_RELAY_LOG_INDEX}
+            write_conf_value "relay-log-index" ${MYSQL_MYSQLD_RELAY_LOG_INDEX}
         fi
-        MYSQL_MYSQLD_SLOW_QUERY_LOG=${MYSQL_MYSQLD_SLOW_QUERY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow_query_log" { print $2; exit }')} && \
-            write_conf_value "slow_query_log" ${MYSQL_MYSQLD_SLOW_QUERY_LOG}
-        MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE=${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow_query_log_file" { print $2; exit }')}
+        MYSQL_MYSQLD_SLOW_QUERY_LOG=${MYSQL_MYSQLD_SLOW_QUERY_LOG:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow-query-log" { print $2; exit }')} && \
+            write_conf_value "slow-query-log" ${MYSQL_MYSQLD_SLOW_QUERY_LOG}
+        MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE=${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "slow-query-log-file" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE" ]; then
             mkdir -p -m 0750 $(dirname ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}) && chown -R ${MYSQL_MYSQLD_USER}:${MYSQL_MYSQLD_USER} $(dirname ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}) && \
-            write_conf_value "slow_query_log_file" ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}
+            write_conf_value "slow-query-log-file" ${MYSQL_MYSQLD_SLOW_QUERY_LOG_FILE}
         fi
         MYSQL_MYSQLD_SOCKET=${MYSQL_MYSQLD_SOCKET:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "socket" { print $2; exit }')}
         if [ ! -z "$MYSQL_MYSQLD_SOCKET" ]; then
@@ -121,8 +121,8 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             write_conf_value "tmpdir" ${MYSQL_MYSQLD_TMPDIR}
         MYSQL_MYSQLD_LOG_SLAVE_UPDATES=${MYSQL_MYSQLD_LOG_SLAVE_UPDATES:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-slave-updates" { print $2; exit }')} && \
             write_conf_value "log-slave-updates" ${MYSQL_MYSQLD_LOG_SLAVE_UPDATES}
-        MYSQL_MYSQLD_EXPIRE_LOGS_DAYS=${MYSQL_MYSQLD_EXPIRE_LOGS_DAYS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "expire_logs_days" { print $2; exit }')} && \
-            write_conf_value "expire_logs_days" ${MYSQL_MYSQLD_EXPIRE_LOGS_DAYS}
+        MYSQL_MYSQLD_EXPIRE_LOGS_DAYS=${MYSQL_MYSQLD_EXPIRE_LOGS_DAYS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "expire-logs-days" { print $2; exit }')} && \
+            write_conf_value "expire-logs-days" ${MYSQL_MYSQLD_EXPIRE_LOGS_DAYS}
         MYSQL_MYSQLD_BINLOG_CHECKSUM=${MYSQL_MYSQLD_BINLOG_CHECKSUM:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "binlog-checksum" { print $2; exit }')} && \
             write_conf_value "binlog-checksum" ${MYSQL_MYSQLD_BINLOG_CHECKSUM}
         MYSQL_MYSQLD_GTID_MODE=${MYSQL_MYSQLD_GTID_MODE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "gtid-mode" { print $2; exit }')} && \
@@ -140,49 +140,46 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
         MYSQL_MYSQLD_BINLOG_FORMAT=${MYSQL_MYSQLD_BINLOG_FORMAT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "binlog-format" { print $2; exit }')} && \
             write_conf_value "binlog-format" ${MYSQL_MYSQLD_BINLOG_FORMAT}
         if [ ! -z ${MYSQL_MYSQLD_LARGE_PAGES} ]; then
-            write_conf "large_pages"
+            write_conf "large-pages"
         fi
         if [ ! -z ${MYSQL_MYSQLD_SKIP_NAME_RESOLVE} ]; then
-            write_conf "skip_name_resolve"
+            write_conf "skip-name-resolve"
         fi
-        if [ ! -z ${MYSQL_MYSQLD_SKIP_NAME_RESOLVE} ]; then
-            write_conf "skip_name_resolve"
+        if [ ! -z ${MYSQL_MYSQLD_SKIP_HOST_CACHE} ]; then
+            write_conf "skip-host-cache"
         fi
-	    if [ ! -z ${MYSQL_MYSQLD_SKIP_HOST_CACHE} ]; then
-	        write_conf "skip_host_cache"
-	    fi
-	    if [ ! -z ${MYSQL_MYSQLD_SKIP_EXTERNAL_LOCKING} ]; then
-	        write_conf "skip_external_locking"
-	    fi
-	    if [ ! -z ${MYSQL_MYSQLD_SKIP_INNODB_DOUBLEWRITE} ]; then
-	        write_conf "skip_innodb_doublewrite"
-	    fi
+        if [ ! -z ${MYSQL_MYSQLD_SKIP_EXTERNAL_LOCKING} ]; then
+            write_conf "skip-external-locking"
+        fi
+        if [ ! -z ${MYSQL_MYSQLD_SKIP_INNODB_DOUBLEWRITE} ]; then
+            write_conf "skip-innodb-doublewrite"
+        fi
         MYSQL_MYSQLD_SYMBOLIC_LINKS=${MYSQL_MYSQLD_SYMBOLIC_LINKS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "symbolic-links" { print $2; exit }')} && \
             write_conf_value "symbolic-links" ${MYSQL_MYSQLD_SYMBOLIC_LINKS}
-        MYSQL_MYSQLD_EVENT_SCHEDULER=${MYSQL_MYSQLD_EVENT_SCHEDULER:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "event_scheduler" { print $2; exit }')} && \
-            write_conf_value "event_scheduler" ${MYSQL_MYSQLD_EVENT_SCHEDULER}
-        MYSQL_MYSQLD_DEFAULT_STORAGE_ENGINE=${MYSQL_MYSQLD_DEFAULT_STORAGE_ENGINE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "default_storage_engine" { print $2; exit }')} && \
-            write_conf_value "default_storage_engine" ${MYSQL_MYSQLD_DEFAULT_STORAGE_ENGINE}
-        MYSQL_MYSQLD_CHARACTER_SET_SERVER=${MYSQL_MYSQLD_CHARACTER_SET_SERVER:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "character_set_server" { print $2; exit }')} && \
-            write_conf_value "character_set_server" ${MYSQL_MYSQLD_CHARACTER_SET_SERVER}
+        MYSQL_MYSQLD_EVENT_SCHEDULER=${MYSQL_MYSQLD_EVENT_SCHEDULER:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "event-scheduler" { print $2; exit }')} && \
+            write_conf_value "event-scheduler" ${MYSQL_MYSQLD_EVENT_SCHEDULER}
+        MYSQL_MYSQLD_DEFAULT_STORAGE_ENGINE=${MYSQL_MYSQLD_DEFAULT_STORAGE_ENGINE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "default-storage-engine" { print $2; exit }')} && \
+            write_conf_value "default-storage-engine" ${MYSQL_MYSQLD_DEFAULT_STORAGE_ENGINE}
+        MYSQL_MYSQLD_CHARACTER_SET_SERVER=${MYSQL_MYSQLD_CHARACTER_SET_SERVER:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "character-set-server" { print $2; exit }')} && \
+            write_conf_value "character-set-server" ${MYSQL_MYSQLD_CHARACTER_SET_SERVER}
         MYSQL_MYSQLD_COLLATION_SERVER=${MYSQL_MYSQLD_COLLATION_SERVER:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "collation-server" { print $2; exit }')} && \
             write_conf_value "collation-server" ${MYSQL_MYSQLD_COLLATION_SERVER}
-        MYSQL_MYSQLD_INIT_CONNECT=\"${MYSQL_MYSQLD_INIT_CONNECT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "init_connect" { print $2; exit }')}\" && \
-            write_conf_value "init_connect" ${MYSQL_MYSQLD_INIT_CONNECT}
-        MYSQL_MYSQLD_CONNECT_TIMEOUT=${MYSQL_MYSQLD_CONNECT_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "connect_timeout" { print $2; exit }')} && \
-            write_conf_value "connect_timeout" ${MYSQL_MYSQLD_CONNECT_TIMEOUT}
-        MYSQL_MYSQLD_WAIT_TIMEOUT=${MYSQL_MYSQLD_WAIT_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "wait_timeout" { print $2; exit }')} && \
-            write_conf_value "wait_timeout" ${MYSQL_MYSQLD_WAIT_TIMEOUT}
-        MYSQL_MYSQLD_MAX_CONNECTIONS=${MYSQL_MYSQLD_MAX_CONNECTIONS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max_connections" { print $2; exit }')} && \
-            write_conf_value "max_connections" ${MYSQL_MYSQLD_MAX_CONNECTIONS}
-        MYSQL_MYSQLD_MAX_ALLOWED_PACKET=${MYSQL_MYSQLD_MAX_ALLOWED_PACKET:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max_allowed_packet" { print $2; exit }')} && \
-            write_conf_value "max_allowed_packet" ${MYSQL_MYSQLD_MAX_ALLOWED_PACKET}
-        MYSQL_MYSQLD_MAX_CONNECT_ERRORS=${MYSQL_MYSQLD_MAX_CONNECT_ERRORS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max_connect_errors" { print $2; exit }')} && \
-            write_conf_value "max_connect_errors" ${MYSQL_MYSQLD_MAX_CONNECT_ERRORS}
-        MYSQL_MYSQLD_NET_READ_TIMEOUT=${MYSQL_MYSQLD_NET_READ_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "net_read_timeout" { print $2; exit }')} && \
-            write_conf_value "net_read_timeout" ${MYSQL_MYSQLD_NET_READ_TIMEOUT}
-        MYSQL_MYSQLD_NET_WRITE_TIMEOUT=${MYSQL_MYSQLD_NET_WRITE_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "net_write_timeout" { print $2; exit }')} && \
-            write_conf_value "net_write_timeout" ${MYSQL_MYSQLD_NET_WRITE_TIMEOUT}
+        MYSQL_MYSQLD_INIT_CONNECT=\"${MYSQL_MYSQLD_INIT_CONNECT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "init-connect" { print $2; exit }')}\" && \
+            write_conf_value "init-connect" ${MYSQL_MYSQLD_INIT_CONNECT}
+        MYSQL_MYSQLD_CONNECT_TIMEOUT=${MYSQL_MYSQLD_CONNECT_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "connect-timeout" { print $2; exit }')} && \
+            write_conf_value "connect-timeout" ${MYSQL_MYSQLD_CONNECT_TIMEOUT}
+        MYSQL_MYSQLD_WAIT_TIMEOUT=${MYSQL_MYSQLD_WAIT_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "wait-timeout" { print $2; exit }')} && \
+            write_conf_value "wait-timeout" ${MYSQL_MYSQLD_WAIT_TIMEOUT}
+        MYSQL_MYSQLD_MAX_CONNECTIONS=${MYSQL_MYSQLD_MAX_CONNECTIONS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max-connections" { print $2; exit }')} && \
+            write_conf_value "max-connections" ${MYSQL_MYSQLD_MAX_CONNECTIONS}
+        MYSQL_MYSQLD_MAX_ALLOWED_PACKET=${MYSQL_MYSQLD_MAX_ALLOWED_PACKET:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max-allowed-packet" { print $2; exit }')} && \
+            write_conf_value "max-allowed-packet" ${MYSQL_MYSQLD_MAX_ALLOWED_PACKET}
+        MYSQL_MYSQLD_MAX_CONNECT_ERRORS=${MYSQL_MYSQLD_MAX_CONNECT_ERRORS:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max-connect-errors" { print $2; exit }')} && \
+            write_conf_value "max-connect-errors" ${MYSQL_MYSQLD_MAX_CONNECT_ERRORS}
+        MYSQL_MYSQLD_NET_READ_TIMEOUT=${MYSQL_MYSQLD_NET_READ_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "net-read-timeout" { print $2; exit }')} && \
+            write_conf_value "net-read-timeout" ${MYSQL_MYSQLD_NET_READ_TIMEOUT}
+        MYSQL_MYSQLD_NET_WRITE_TIMEOUT=${MYSQL_MYSQLD_NET_WRITE_TIMEOUT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "net-write-timeout" { print $2; exit }')} && \
+            write_conf_value "net-write-timeout" ${MYSQL_MYSQLD_NET_WRITE_TIMEOUT}
         MYSQL_MYSQLD_LOG_QUERIES_NOT_USING_INDEXES=${MYSQL_MYSQLD_LOG_QUERIES_NOT_USING_INDEXES:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "log-queries-not-using-indexes" { print $2; exit }')} && \
             write_conf_value "log-queries-not-using-indexes" ${MYSQL_MYSQLD_LOG_QUERIES_NOT_USING_INDEXES}
         MYSQL_MYSQLD_TRANSACTION_ISOLATION=${MYSQL_MYSQLD_TRANSACTION_ISOLATION:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "transaction-isolation" { print $2; exit }')} && \
@@ -219,34 +216,34 @@ if [ "$1" = "mysqld" -a -z "$wantHelp" ]; then
             write_conf_value "innodb-log-checksums" ${MYSQL_MYSQLD_INNODB_LOG_CHECKSUMS}
         MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE=${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "innodb-log-file-size" { print $2; exit }')} && \
             write_conf_value "innodb-log-file-size" ${MYSQL_MYSQLD_INNODB_LOG_FILE_SIZE}
-        MYSQL_MYSQLD_PERFORMANCE_SCHEMA=${MYSQL_MYSQLD_PERFORMANCE_SCHEMA:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "performance_schema" { print $2; exit }')} && \
-            write_conf_value "performance_schema" ${MYSQL_MYSQLD_PERFORMANCE_SCHEMA}
-        MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP=${MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "explicit_defaults_for_timestamp" { print $2; exit }')} && \
-            write_conf_value "explicit_defaults_for_timestamp" ${MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP}
-        MYSQL_MYSQLD_QUERY_CACHE_SIZE=${MYSQL_MYSQLD_QUERY_CACHE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "query_cache_size" { print $2; exit }')} && \
+        MYSQL_MYSQLD_PERFORMANCE_SCHEMA=${MYSQL_MYSQLD_PERFORMANCE_SCHEMA:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "performance-schema" { print $2; exit }')} && \
+            write_conf_value "performance-schema" ${MYSQL_MYSQLD_PERFORMANCE_SCHEMA}
+        MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP=${MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "explicit-defaults-for-timestamp" { print $2; exit }')} && \
+            write_conf_value "explicit-defaults-for-timestamp" ${MYSQL_MYSQLD_EXPLICIT_DEFAULTS_FOR_TIMESTAMP}
+        MYSQL_MYSQLD_QUERY_CACHE_SIZE=${MYSQL_MYSQLD_QUERY_CACHE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "query-cache-size" { print $2; exit }')} && \
             write_conf_value "query_cache_size" ${MYSQL_MYSQLD_QUERY_CACHE_SIZE}
-        MYSQL_MYSQLD_QUERY_CACHE_TYPE=${MYSQL_MYSQLD_QUERY_CACHE_TYPE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "query_cache_type" { print $2; exit }')} && \
-            write_conf_value "query_cache_type" ${MYSQL_MYSQLD_QUERY_CACHE_TYPE}
-        MYSQL_MYSQLD_QUERY_CACHE_MIN_RES_UNIT=${MYSQL_MYSQLD_QUERY_CACHE_MIN_RES_UNIT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "query_cache_min_res_unit" { print $2; exit }')} && \
-            write_conf_value "query_cache_min_res_unit" ${MYSQL_MYSQLD_QUERY_CACHE_MIN_RES_UNIT}
-        MYSQL_MYSQLD_JOIN_BUFFER_SIZE=${MYSQL_MYSQLD_JOIN_BUFFER_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "join_buffer_size" { print $2; exit }')} && \
-            write_conf_value "join_buffer_size" ${MYSQL_MYSQLD_JOIN_BUFFER_SIZE}
-        MYSQL_MYSQLD_READ_RND_BUFFER_SIZE=${MYSQL_MYSQLD_READ_RND_BUFFER_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "read_rnd_buffer_size" { print $2; exit }')} && \
-            write_conf_value "read_rnd_buffer_size" ${MYSQL_MYSQLD_READ_RND_BUFFER_SIZE}
-        MYSQL_MYSQLD_TABLE_DEFINITION_CACHE=${MYSQL_MYSQLD_TABLE_DEFINITION_CACHE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "table_definition_cache" { print $2; exit }')} && \
-            write_conf_value "table_definition_cache" ${MYSQL_MYSQLD_TABLE_DEFINITION_CACHE}
-        MYSQL_MYSQLD_TABLE_OPEN_CACHE=${MYSQL_MYSQLD_TABLE_OPEN_CACHE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "table_open_cache" { print $2; exit }')} && \
-            write_conf_value "table_open_cache" ${MYSQL_MYSQLD_TABLE_OPEN_CACHE}
-        MYSQL_MYSQLD_THREAD_CACHE_SIZE=${MYSQL_MYSQLD_THREAD_CACHE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "thread_cache_size" { print $2; exit }')} && \
-            write_conf_value "thread_cache_size" ${MYSQL_MYSQLD_THREAD_CACHE_SIZE}
-        MYSQL_MYSQLD_TMP_TABLE_SIZE=${MYSQL_MYSQLD_TMP_TABLE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "tmp_table_size" { print $2; exit }')} && \
-            write_conf_value "tmp_table_size" ${MYSQL_MYSQLD_TMP_TABLE_SIZE}
-        MYSQL_MYSQLD_MAX_HEAP_TABLE_SIZE=${MYSQL_MYSQLD_MAX_HEAP_TABLE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max_heap_table_size" { print $2; exit }')} && \
-            write_conf_value "max_heap_table_size" ${MYSQL_MYSQLD_MAX_HEAP_TABLE_SIZE}
-        MYSQL_MYSQLD_THREAD_HANDLING=${MYSQL_MYSQLD_THREAD_HANDLING:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "thread_handling" { print $2; exit }')} && \
-            write_conf_value "thread_handling" ${MYSQL_MYSQLD_THREAD_HANDLING}
-        MYSQL_MYSQLD_THREAD_POOL_SIZE=${MYSQL_MYSQLD_THREAD_POOL_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "thread_pool_size" { print $2; exit }')} && \
-            write_conf_value "thread_pool_size" ${MYSQL_MYSQLD_THREAD_POOL_SIZE}
+        MYSQL_MYSQLD_QUERY_CACHE_TYPE=${MYSQL_MYSQLD_QUERY_CACHE_TYPE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "query-cache-type" { print $2; exit }')} && \
+            write_conf_value "query-cache-type" ${MYSQL_MYSQLD_QUERY_CACHE_TYPE}
+        MYSQL_MYSQLD_QUERY_CACHE_MIN_RES_UNIT=${MYSQL_MYSQLD_QUERY_CACHE_MIN_RES_UNIT:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "query-cache-min-res-unit" { print $2; exit }')} && \
+            write_conf_value "query-cache-min-res-unit" ${MYSQL_MYSQLD_QUERY_CACHE_MIN_RES_UNIT}
+        MYSQL_MYSQLD_JOIN_BUFFER_SIZE=${MYSQL_MYSQLD_JOIN_BUFFER_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "join-buffer-size" { print $2; exit }')} && \
+            write_conf_value "join-buffer-size" ${MYSQL_MYSQLD_JOIN_BUFFER_SIZE}
+        MYSQL_MYSQLD_READ_RND_BUFFER_SIZE=${MYSQL_MYSQLD_READ_RND_BUFFER_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "read-rnd-buffer-size" { print $2; exit }')} && \
+            write_conf_value "read-rnd-buffer-size" ${MYSQL_MYSQLD_READ_RND_BUFFER_SIZE}
+        MYSQL_MYSQLD_TABLE_DEFINITION_CACHE=${MYSQL_MYSQLD_TABLE_DEFINITION_CACHE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "table-definition-cache" { print $2; exit }')} && \
+            write_conf_value "table-definition-cache" ${MYSQL_MYSQLD_TABLE_DEFINITION_CACHE}
+        MYSQL_MYSQLD_TABLE_OPEN_CACHE=${MYSQL_MYSQLD_TABLE_OPEN_CACHE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "table-open-cache" { print $2; exit }')} && \
+            write_conf_value "table-open-cache" ${MYSQL_MYSQLD_TABLE_OPEN_CACHE}
+        MYSQL_MYSQLD_THREAD_CACHE_SIZE=${MYSQL_MYSQLD_THREAD_CACHE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "thread-cache-size" { print $2; exit }')} && \
+            write_conf_value "thread-cache-size" ${MYSQL_MYSQLD_THREAD_CACHE_SIZE}
+        MYSQL_MYSQLD_TMP_TABLE_SIZE=${MYSQL_MYSQLD_TMP_TABLE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "tmp-table-size" { print $2; exit }')} && \
+            write_conf_value "tmp-table-size" ${MYSQL_MYSQLD_TMP_TABLE_SIZE}
+        MYSQL_MYSQLD_MAX_HEAP_TABLE_SIZE=${MYSQL_MYSQLD_MAX_HEAP_TABLE_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "max-heap-table-size" { print $2; exit }')} && \
+            write_conf_value "max-heap-table-size" ${MYSQL_MYSQLD_MAX_HEAP_TABLE_SIZE}
+        MYSQL_MYSQLD_THREAD_HANDLING=${MYSQL_MYSQLD_THREAD_HANDLING:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "thread-handling" { print $2; exit }')} && \
+            write_conf_value "thread-handling" ${MYSQL_MYSQLD_THREAD_HANDLING}
+        MYSQL_MYSQLD_THREAD_POOL_SIZE=${MYSQL_MYSQLD_THREAD_POOL_SIZE:-$("$@" --verbose --help 2>/dev/null | awk '$1 == "thread-pool-size" { print $2; exit }')} && \
+            write_conf_value "thread-pool-size" ${MYSQL_MYSQLD_THREAD_POOL_SIZE}
     fi
 
     # New install?
